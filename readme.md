@@ -3,14 +3,15 @@
 TODO: Write a project description
 
 ## Installation
-    1. Fork it!
-    2. Create your feature branch: `git checkout -b my-new-feature`
-    3. Commit your changes: `git commit -am 'Add some feature'`
-    4. Push to the branch: `git push origin my-new-feature`
-    5. Submit a pull request :D
+    1. Download Virtual Box.
+    2. Download Vagrant.
+    3. Pull project from github, succesfully
+    4. Go to Homestead.yaml inside project and change folders map
+        - map: "/Users/alirzayev/PhpstormProjects" with your project folder 
+    5. Find /etc/hosts file in your computer and add "192.168.10.10  local.gelsin.com" line to the file.
 ## Usage
 
-TODO: Write usage instructions
+Try to use local.gelsin.com on your browser.
 
 ## History
 
