@@ -1,4 +1,4 @@
-# Gəlsin
+# Gelsin
 
 TODO: Write a project description
 
