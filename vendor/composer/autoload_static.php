@@ -11,6 +11,7 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         '72579e7bd17821bb1321b87411366eae' => __DIR__ . '/..' . '/illuminate/support/helpers.php',
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
         'bee9632da3ca00a99623b9c35d0c4f8b' => __DIR__ . '/..' . '/laravel/lumen-framework/src/helpers.php',
     );
@@ -24,8 +25,14 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         array (
             'Webmozart\\Assert\\' => 17,
         ),
+        'T' => 
+        array (
+            'Tymon\\JWTAuth\\' => 14,
+        ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Util\\' => 22,
+            'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Yaml\\' => 23,
             'Symfony\\Component\\Translation\\' => 30,
@@ -40,6 +47,10 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+        ),
+        'N' => 
+        array (
+            'Namshi\\JOSE\\' => 12,
         ),
         'M' => 
         array (
@@ -107,6 +118,18 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
+        'Tymon\\JWTAuth\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tymon/jwt-auth/src',
+        ),
+        'Symfony\\Polyfill\\Util\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
+        ),
+        'Symfony\\Polyfill\\Php56\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
@@ -150,6 +173,10 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
+        'Namshi\\JOSE\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/namshi/jose/src/Namshi/JOSE',
         ),
         'Monolog\\' => 
         array (
@@ -313,6 +340,13 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
     );
 
     public static $classMap = array (
+        'CreateBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_03_212429_create_branches_table.php',
+        'CreateCustomersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_27_222052_create_customers_table.php',
+        'CreatePrAddressesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_03_210902_create_pr_addresses_table.php',
+        'CreatePrImagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_03_210146_create_pr_images_table.php',
+        'CreateProductsTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_28_103325_create_products_table.php',
+        'CreateSellersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_27_224137_create_sellers_table.php',
+        'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_27_214042_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'ExampleTest' => __DIR__ . '/../..' . '/tests/ExampleTest.php',
         'File_Iterator' => __DIR__ . '/..' . '/phpunit/php-file-iterator/src/Iterator.php',
@@ -845,6 +879,7 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
+        'UsersTableSeeder' => __DIR__ . '/../..' . '/database/seeds/UsersTableSeeder.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

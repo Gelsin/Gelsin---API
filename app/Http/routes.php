@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,16 +9,12 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-
 $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-//$app->get('/hello', function () use ($app) {
-//    return "Hello World";
-//});
+$app->group(['prefix' => 'api'], function() use ($app) {
+    $app->POST('/auth/login', 'AuthController@loginPost');
+    $app->POST('/auth/register', 'AuthController@register');
 
-
-$app->POST('/auth/login', 'AuthController@loginPost');
-
-
+});

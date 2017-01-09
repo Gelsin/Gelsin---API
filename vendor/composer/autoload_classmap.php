@@ -6,6 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'CreateBranchesTable' => $baseDir . '/database/migrations/2017_01_03_212429_create_branches_table.php',
+    'CreateCustomersTable' => $baseDir . '/database/migrations/2016_12_27_222052_create_customers_table.php',
+    'CreatePrAddressesTable' => $baseDir . '/database/migrations/2017_01_03_210902_create_pr_addresses_table.php',
+    'CreatePrImagesTable' => $baseDir . '/database/migrations/2017_01_03_210146_create_pr_images_table.php',
+    'CreateProductsTable' => $baseDir . '/database/migrations/2016_12_28_103325_create_products_table.php',
+    'CreateSellersTable' => $baseDir . '/database/migrations/2016_12_27_224137_create_sellers_table.php',
+    'CreateUsersTable' => $baseDir . '/database/migrations/2016_12_27_214042_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
@@ -538,4 +545,5 @@ return array(
     'SebastianBergmann\\Version' => $vendorDir . '/sebastian/version/src/Version.php',
     'TestCase' => $baseDir . '/tests/TestCase.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
+    'UsersTableSeeder' => $baseDir . '/database/seeds/UsersTableSeeder.php',
 );
