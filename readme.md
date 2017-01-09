@@ -1,22 +1,26 @@
-# Lumen PHP Framework
+# Gelsin
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/d/total.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://poser.pugx.org/laravel/lumen-framework/license.svg)](https://packagist.org/packages/laravel/lumen-framework)
+TODO: Write a project description
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Installation
+    1. Download Virtual Box
+    2. Download Vagrant
+    3. Pull project from github, succesfully
+    4. Go to Homestead.yaml inside project and change folders map
+        - map: "/Users/alirzayev/PhpstormProjects" with your project folder 
+    5. Find /etc/hosts file in your computer and add "192.168.10.10  local.gelsin.com" line to the file.
+## Usage
 
-## Official Documentation
+Try to use **local.gelsin.com** on your browser.
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+## History
 
-## Security Vulnerabilities
+TODO: Write history
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+## Credits
+
+TODO: Write credits
 
 ## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
-# Gelsin---API
+TODO: Write license
