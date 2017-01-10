@@ -22,5 +22,13 @@ $app->group(['prefix' => 'api'], function() use ($app) {
     $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
 
 
+    // -- Admin Actions
+    $app->group(['prefix' => 'admin'], function () use ($app) {
+
+        $app->post('/category/add', 'CategoryController@create');
+
+    });
 
 });
+
+
