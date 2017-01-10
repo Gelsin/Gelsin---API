@@ -14,7 +14,13 @@ $app->get('/', function () use ($app) {
 });
 
 $app->group(['prefix' => 'api'], function() use ($app) {
-    $app->POST('/auth/login', 'AuthController@loginPost');
+
+    $app->POST('/auth/login', 'AuthController@postLogin');
     $app->POST('/auth/register', 'AuthController@register');
+    $app->GET('/auth/user', 'AuthController@getUser');
+    $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
+    $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
+
+
 
 });
