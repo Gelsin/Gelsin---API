@@ -75,6 +75,33 @@ class ProductController extends Controller
 
     }
 
+    /**
+     * Show product.
+     * @param $product_id
+     * @return JsonResponse
+     */
+    public function show($product_id)
+    {
+
+        // All good so get product
+        $product = Product::find($product_id);
+
+
+        if (!$product) {
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'not found!',
+            ]);
+        }
+
+        return new JsonResponse([
+            "error" => false,
+            'message' => 'success!',
+            "product" => $product
+        ]);
+
+    }
+
 
     /**
      * Update category.

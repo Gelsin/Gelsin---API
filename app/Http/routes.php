@@ -34,6 +34,8 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Product Services
     $app->get('/products', 'ProductController@index');
+    $app->get('/products/{product_id}', 'ProductController@show');
+
 
     // -- Branch Services
     $app->get('/branches', 'BranchController@index');
