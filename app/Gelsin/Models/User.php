@@ -48,6 +48,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return $this->getKey();
     }
+
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
@@ -56,5 +57,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * @return mixed
+     */
+    public static function isSeller()
+    {
+        return static::where('is_customer', 0);
     }
 }

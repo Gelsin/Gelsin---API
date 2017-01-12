@@ -4,6 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Authenticate
 {
@@ -36,7 +39,33 @@ class Authenticate
     public function handle($request, Closure $next, $guard = null)
     {
         if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+
+            try {
+
+                $user = $this->jwt->parseToken()->authenticate();
+
+                if (!$user) {
+
+                    return new JsonResponse([
+                        "error" => true,
+                        'message' => 'user_not_found',
+                    ]);
+                }
+
+            } catch (TokenInvalidException $e) {
+
+                return new JsonResponse([
+                    "error" => true,
+                    'message' => 'token_absent',
+                ]);
+
+            } catch (TokenExpiredException $e) {
+
+                return new JsonResponse([
+                    "error" => true,
+                    'message' => 'token_expired',
+                ]);
+            }
         }
 
         return $next($request);

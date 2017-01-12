@@ -11,20 +11,18 @@ namespace App\Gelsin\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model
+class Product extends Model
 {
     use SoftDeletes;
 
-
-    protected $table = 'categories';
+    protected $table = 'products';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'parent_id'];
-
+    protected $fillable = ['name', 'category_id', 'quantity', 'price', 'is_discounted'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -33,32 +31,25 @@ class Category extends Model
      */
     protected $dates = ['deleted_at'];
 
-
-    public function parent()
+    /**
+     * Get product category.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
     {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     /**
-     * Get the index name for the model.
+     * Get product images
      *
-     * @return string
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function childs()
+    public function images()
     {
-        return $this->hasMany(Category::class, 'parent_id');
+        return $this->hasMany(ProductImage::class, 'product_id');
     }
-
-    /**
-     * Get category products.
-     *
-     * @return string
-     */
-    public function products()
-    {
-        return $this->hasMany(Product::class, 'category_id');
-    }
-
 
 
 }

@@ -1,0 +1,81 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: alirzayev
+ * Date: 12/01/2017
+ * Time: 13:40
+ */
+
+namespace App\Http\Middleware;
+
+
+use Exception;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\JWTAuth;
+
+class Admin
+{
+
+    protected $auth;
+    protected $jwt;
+
+
+    public function __construct(Guard $auth, JWTAuth $jwt)
+    {
+        $this->auth = $auth;
+        $this->jwt = $jwt;
+    }
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @param  string $permissions
+     * @return mixed
+     */
+    public function handle($request, \Closure $next, $permissions = '')
+    {
+
+        try {
+
+            $user = $this->jwt->parseToken()->authenticate();
+
+            if (!$user) {
+
+                return new JsonResponse([
+                    "error" => true,
+                    'message' => 'user_not_found',
+                ]);
+            }
+
+        } catch (TokenInvalidException $e) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'token_absent',
+            ]);
+
+        } catch (TokenExpiredException $e) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'token_expired',
+            ]);
+        }
+
+
+        if ($user->is_customer == 1) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => "You don't have permission to do this!",
+            ]);
+        }
+        return $next($request);
+    }
+
+}

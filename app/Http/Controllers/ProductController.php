@@ -10,11 +10,11 @@ namespace App\Http\Controllers;
 
 
 use App\Gelsin\Models\Category;
+use App\Gelsin\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
-class CategoryController extends Controller
+class ProductController extends Controller
 {
 
 
@@ -27,83 +27,80 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
 
-        $categories = Category::where('parent_id', '=', 0)->get();
+        $category_id = $request->get("category_id");
+        $products = Category::find($category_id)->products;
 
-        foreach ($categories as $category) {
-
-            $subcategories = $category->childs;
-
-            foreach ($subcategories as $subcategory) {
-
-                $subcategory->childs;
-            }
-
-            $allCategories[] = $category;
-        }
 
         return new JsonResponse([
             "error" => false,
             "message" => "success",
-            'categoryTree' => $categories,
+            'products' => $products,
         ]);
     }
 
     /**
-     * Create  new category.
+     * Create  new product.
      * @param Request $request
      * @return JsonResponse
      */
     public function create(Request $request)
     {
 
-
-
         // All good so create new category
-        $category = Category::create($request->all());
+        $product = Product::create($request->all());
 
         return new JsonResponse([
             "error" => false,
             'message' => 'success!',
-            "category" => $category
+            "category" => $product
         ]);
 
     }
 
 
     /**
-     * Update  new category.
+     * Create  new category.
      * @param Request $request
      * @return JsonResponse
      */
     public function update(Request $request)
     {
 
-
-        // All good so update category
-        $category = Category::find($request->get('category_id'));
+        // All good so update product
+        $product = Product::find($request->get('product_id'));
         if ($request->get("name")) {
 
-            $category->name = $request->get("name");
+            $product->name = $request->get("name");
             $message = "Category name updated";
         }
-        if ($request->get("parent_id")) {
+        if ($request->get("category_id")) {
 
-            $category->parent_id = $request->get("parent_id");
-            $message = "Parent id updated";
+            $product->category_id = $request->get("category_id");
+            $message = "Category id updated";
         }
-        $category->save();
+        if ($request->get("quantity")) {
+
+            $product->quantity = $request->get("quantity");
+            $message = "Quantity updated";
+        }
+        if ($request->get("price")) {
+
+            $product->price = $request->get("price");
+            $message = "Price updated";
+        }
+
+        $product->save();
 
         return new JsonResponse([
             "error" => false,
             'message' => $message,
-            "category" => $category
+            "category" => $product
         ]);
 
     }
 
-
     /**
-     * Delete   category.
+     * Delete   product.
      * @param Request $request
      * @return JsonResponse
      */
@@ -111,16 +108,15 @@ class CategoryController extends Controller
     {
 
 
-        // All good so delete category and its relations
-        $category = Category::find($request->get('category_id'));
-        $category->products()->delete();
-        $category->delete();
+        // All good so update category
+        $product = Product::find($request->get('product_id'));
+        $product->delete();
 
 
         return new JsonResponse([
             "error" => false,
-            'message' => $category->name . " is soft deleted",
-            "category" => $category
+            'message' => $product->name . " is soft deleted",
+            "category" => $product
         ]);
 
     }
