@@ -3,10 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\JWTAuth;
 
 class Authenticate
 {
@@ -16,57 +16,57 @@ class Authenticate
      * @var \Illuminate\Contracts\Auth\Factory
      */
     protected $auth;
+    protected $jwt;
+
 
     /**
      * Create a new middleware instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Factory  $auth
-     * @return void
+     * @param JWTAuth $jwt
      */
-    public function __construct(Auth $auth)
+    public function __construct(JWTAuth $jwt)
     {
-        $this->auth = $auth;
+        $this->jwt = $jwt;
+
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string|null  $guard
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-        if ($this->auth->guard($guard)->guest()) {
 
-            try {
+        try {
 
-                $user = $this->jwt->parseToken()->authenticate();
+            $user = $this->jwt->parseToken()->authenticate();
 
-                if (!$user) {
-
-                    return new JsonResponse([
-                        "error" => true,
-                        'message' => 'user_not_found',
-                    ]);
-                }
-
-            } catch (TokenInvalidException $e) {
+            if (!$user) {
 
                 return new JsonResponse([
                     "error" => true,
-                    'message' => 'token_absent',
-                ]);
-
-            } catch (TokenExpiredException $e) {
-
-                return new JsonResponse([
-                    "error" => true,
-                    'message' => 'token_expired',
+                    'message' => 'user_not_found',
                 ]);
             }
+
+        } catch (TokenInvalidException $e) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'token_absent',
+            ]);
+
+        } catch (TokenExpiredException $e) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'token_expired',
+            ]);
         }
+
 
         return $next($request);
     }

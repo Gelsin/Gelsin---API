@@ -24,12 +24,30 @@ class ProductController extends Controller
     }
 
 
+    /**
+     * List products according to selected category.
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function index(Request $request)
     {
+        // -- First  Validate
+        $this->validate($request, [
+            'category_id' => 'required',
+        ]);
 
         $category_id = $request->get("category_id");
-        $products = Category::find($category_id)->products;
+        $branch_id = $request->get("branch_id");
 
+        $products = Category::find($category_id)->products->where("branch_id", $branch_id);
+
+        if ($products->count() < 1) {
+
+            return new JsonResponse([
+                "error" => true,
+                "message" => "No product on this branch!",
+            ]);
+        }
 
         return new JsonResponse([
             "error" => false,
@@ -59,7 +77,7 @@ class ProductController extends Controller
 
 
     /**
-     * Create  new category.
+     * Update category.
      * @param Request $request
      * @return JsonResponse
      */
@@ -87,6 +105,11 @@ class ProductController extends Controller
 
             $product->price = $request->get("price");
             $message = "Price updated";
+        }
+        if ($request->get("branch_id")) {
+
+            $product->branch_id = $request->get("branch_id");
+            $message = "Branch id updated";
         }
 
         $product->save();

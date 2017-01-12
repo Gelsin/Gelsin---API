@@ -22,7 +22,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'category_id', 'quantity', 'price', 'is_discounted'];
+    protected $fillable = ['name', 'category_id', 'branch_id', 'quantity', 'price', 'is_discounted',];
 
     /**
      * The attributes that should be mutated to dates.
@@ -30,6 +30,15 @@ class Product extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'deleted_at',
+    ];
 
     /**
      * Get product category.

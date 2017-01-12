@@ -6,6 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddAddressLineToBranchesTable' => $baseDir . '/database/migrations/2017_01_12_115611_add_address_line_to_branches_table.php',
+    'AddBranchIdToProductsTable' => $baseDir . '/database/migrations/2017_01_12_124454_add_branch_id_to_products_table.php',
+    'AddLatitudeToBranchesTable' => $baseDir . '/database/migrations/2017_01_12_114637_add_latitude_to_branches_table.php',
+    'AddNameToBranchesTable' => $baseDir . '/database/migrations/2017_01_12_114325_add_name_to_branches_table.php',
+    'AddProductQuantityToBranchesTable' => $baseDir . '/database/migrations/2017_01_12_123522_add_product_quantity_to_branches_table.php',
     'CreateBranchesTable' => $baseDir . '/database/migrations/2017_01_03_212429_create_branches_table.php',
     'CreateCategoriesTable' => $baseDir . '/database/migrations/2017_01_10_193053_create_categories_table.php',
     'CreateCustomersTable' => $baseDir . '/database/migrations/2016_12_27_222052_create_customers_table.php',

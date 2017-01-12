@@ -13,14 +13,21 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->group(['prefix' => 'api'], function() use ($app) {
+$app->group(['prefix' => 'api'], function () use ($app) {
 
-    // -- Authentication Services
+    // -- Not Authenticated User Services
     $app->POST('/auth/login', 'AuthController@postLogin');
     $app->POST('/auth/register', 'AuthController@register');
-    $app->GET('/auth/user', 'AuthController@getUser');
-    $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
-    $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
+
+
+    // -- Authenticated User Services
+    $app->group(['middleware' => 'auth'], function ($app) {
+        $app->GET('/auth/user', 'AuthController@getUser');
+        $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
+        $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
+    });
+
+
 
     // -- Categories Services
     $app->get('/categories', 'CategoryController@index');
@@ -28,11 +35,20 @@ $app->group(['prefix' => 'api'], function() use ($app) {
     // -- Product Services
     $app->get('/products', 'ProductController@index');
 
+    // -- Branch Services
+    $app->get('/branches', 'BranchController@index');
+
 
     // -- Admin Services
     $app->group(['prefix' => 'admin', 'middleware' => 'admin'], function () use ($app) {
 
-        // -- Categories services
+        // -- Branch services
+        $app->post('/branch/add', 'BranchController@create');
+        $app->post('/branch/update', 'BranchController@update');
+        $app->post('/branch/delete', 'BranchController@delete');
+
+
+        // -- Category services
         $app->post('/category/add', 'CategoryController@create');
         $app->post('/category/update', 'CategoryController@update');
         $app->post('/category/delete', 'CategoryController@delete');
@@ -45,15 +61,6 @@ $app->group(['prefix' => 'api'], function() use ($app) {
 
 
     });
-
-//    $app->group(['middleware' => 'admin'], function($app)
-//    {
-//        $app->get('/test', function() {
-//            return response()->json([
-//                'message' => 'Hello World!',
-//            ]);
-//        });
-//    });
 
 });
 
