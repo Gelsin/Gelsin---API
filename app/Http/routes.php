@@ -41,6 +41,10 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     $app->get('/branches', 'BranchController@index');
 
 
+    // -- Order Services
+    $app->get('/orders', 'OrderController@index');
+
+
     // -- Admin Services
     $app->group(['prefix' => 'admin', 'middleware' => 'admin'], function () use ($app) {
 

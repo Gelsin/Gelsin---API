@@ -13,6 +13,7 @@ use App\Gelsin\Models\Category;
 use App\Gelsin\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -31,10 +32,28 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // -- First  Validate
-        $this->validate($request, [
+
+        // -- define required parameters
+        $rules = [
             'category_id' => 'required',
-        ]);
+            'branch_id' => 'required',
+        ];
+
+        // -- customize error messages
+        $messages = [
+            'category_id.required' => 'Category id is required!',
+            'branch_id.required' => 'Branch id is required!',
+        ];
+
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
+        }
+
 
         $category_id = $request->get("category_id");
         $branch_id = $request->get("branch_id");
@@ -63,6 +82,23 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
+
+        // -- define required parameters
+        $rules = [
+            'category_id' => 'required',
+            'name' => 'required',
+            'quantity' => 'required',
+            'price' => 'required',
+        ];
+
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
+        }
 
         // All good so create new category
         $product = Product::create($request->all());

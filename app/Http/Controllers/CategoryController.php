@@ -12,6 +12,7 @@ namespace App\Http\Controllers;
 use App\Gelsin\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 class CategoryController extends Controller
@@ -56,7 +57,25 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
 
+        // -- define required parameters
+        $rules = [
+            'name' => 'required',
+            'parent_id' => 'required',
+        ];
 
+        // -- customize error messages
+        $messages = [
+            'name.required' => 'User id is required!',
+            'parent_id.required' => 'Parent id is required!',
+        ];
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
+        }
 
         // All good so create new category
         $category = Category::create($request->all());
