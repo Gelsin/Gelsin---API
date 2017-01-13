@@ -25,6 +25,10 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->GET('/auth/user', 'AuthController@getUser');
         $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
         $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
+        // -- Order Services
+        $app->get('/orders', 'OrderController@index');
+        $app->POST('/order/update', 'OrderController@update');
+
     });
 
 
@@ -39,10 +43,6 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Branch Services
     $app->get('/branches', 'BranchController@index');
-
-
-    // -- Order Services
-    $app->get('/orders', 'OrderController@index');
 
 
     // -- Admin Services
@@ -64,6 +64,11 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/product/add', 'ProductController@create');
         $app->post('/product/update', 'ProductController@update');
         $app->post('/product/delete', 'ProductController@delete');
+
+        // -- Order services
+        $app->post('/order/add', 'OrderController@create');
+        $app->post('/order/update', 'ProductController@update');
+        $app->post('/order/delete', 'ProductController@delete');
 
 
     });

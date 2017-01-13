@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\JsonResponse;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\JWTAuth;
@@ -43,6 +44,7 @@ class Authenticate
         try {
 
             $user = $this->jwt->parseToken()->authenticate();
+            $token = $this->jwt->getToken();
 
             if (!$user) {
 
@@ -65,6 +67,13 @@ class Authenticate
                 "error" => true,
                 'message' => 'token_expired',
             ]);
+        } catch (JWTException $e) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'token_absent',
+            ]);
+
         }
 
 

@@ -23,4 +23,22 @@ class Order extends Model
      */
     protected $fillable = ['customer_id', 'status'];
 
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function detail()
+    {
+        return $this->hasOne(OrderDetail::class, 'order_id');
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(OrderProduct::class, 'order_id');
+    }
+
 }

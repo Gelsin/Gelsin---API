@@ -9,19 +9,22 @@
 namespace App\Http\Controllers;
 
 
-use App\Gelsin\Models\Category;
-use App\Gelsin\Models\Product;
+use App\Gelsin\Models\Order;
+use App\Gelsin\Models\OrderDetail;
+use App\Gelsin\Models\OrderProduct;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\JWTAuth;
 
 class OrderController extends Controller
 {
 
+    protected $jwt;
 
-    public function __construct()
+    public function __construct(JWTAuth $jwt)
     {
-
+        $this->jwt = $jwt;
     }
 
 
@@ -32,30 +35,31 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        // -- define required parameters
-        $rules = [
-            'user_id' => 'required',
-        ];
+        $user = $this->jwt->parseToken()->authenticate();
 
-        // -- customize error messages
-        $messages = [
-            'user_id.required' => 'User id is required!',
-        ];
-        // -- Validate and display error messages
-        $validator = Validator::make($request->all(), $rules, $messages);
-        if ($validator->fails()) {
+        $orders = $user->orders;
+        if ($orders->count() < 1) {
+
             return new JsonResponse([
                 "error" => true,
-                "message" => $validator->errors()->all()
+                'message' => "youu don't have any orders",
+                'orders' => $orders,
             ]);
+
         }
 
-//        // All good so get orders
-//        return new JsonResponse([
-//            "error" => false,
-//            "message" => "success",
-//            'user' => "",
-//        ]);
+        // All good so list user orders
+        foreach ($orders as $order) {
+            $order->detail;
+            $order->products;
+        }
+
+        return new JsonResponse([
+            "error" => false,
+            'message' => 'success',
+            'orders' => $orders,
+        ]);
+
     }
 
     /**
@@ -66,9 +70,54 @@ class OrderController extends Controller
     public function create(Request $request)
     {
 
+        $user = $this->jwt->parseToken()->authenticate();
+
+        // -- define required parameters
+        $rules = [
+            'delivery_is_now' => 'required',
+            'address' => 'required',
+        ];
+
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
+        }
+
+
+
         // All good so create new order
-        $product = Product::create($request->all());
-        if (!$product) {
+        $products = $request->get("products");
+
+
+        $order = new Order();
+        $order->customer_id = $user->id;
+        $order->save();
+
+        foreach ($products as $product) {
+
+            $order_product = new OrderProduct();
+            $order_product->order_id = $order->id;
+            $order_product->product_id = $product['product_id'];
+            $order_product->price = $product['price'];
+            $order_product->quantity = $product['quantity'];
+            $order_product->save();
+
+        }
+
+        $order_detail = new OrderDetail();
+        $order_detail->order_id = $order->id;
+        $order_detail->delivery_is_now = $request->get("delivery_is_now");
+        $order_detail->delivery_date = $request->get("delivery_date");
+        $order_detail->address = $request->get("address");
+        $order_detail->notes = $request->get("notes");
+        $order_detail->save();
+
+
+        if (!$order) {
 
             return new JsonResponse([
                 "error" => true,
@@ -78,38 +127,12 @@ class OrderController extends Controller
         }
 
         // All good so get product
-
         return new JsonResponse([
             "error" => false,
-            'message' => 'success!',
-            "category" => $product
-        ]);
-
-    }
-
-    /**
-     * Show product.
-     * @param $product_id
-     * @return JsonResponse
-     */
-    public function show($product_id)
-    {
-
-        // All good so get product
-        $product = Product::find($product_id);
-
-
-        if (!$product) {
-            return new JsonResponse([
-                "error" => true,
-                'message' => 'not found!',
-            ]);
-        }
-
-        return new JsonResponse([
-            "error" => false,
-            'message' => 'success!',
-            "product" => $product
+            'message' => 'order is completed!',
+            'order_id' => $order->id,
+            "details" => $order->detail,
+            "products" => $order->products
         ]);
 
     }
@@ -123,40 +146,39 @@ class OrderController extends Controller
     public function update(Request $request)
     {
 
-        // All good so update product
-        $product = Product::find($request->get('product_id'));
-        if ($request->get("name")) {
+        // -- define required parameters
+        $rules = [
+            'delivery_is_now' => 'required',
+            'delivery_date' => 'required',
+            'address' => 'required',
+        ];
 
-            $product->name = $request->get("name");
-            $message = "Category name updated";
-        }
-        if ($request->get("category_id")) {
-
-            $product->category_id = $request->get("category_id");
-            $message = "Category id updated";
-        }
-        if ($request->get("quantity")) {
-
-            $product->quantity = $request->get("quantity");
-            $message = "Quantity updated";
-        }
-        if ($request->get("price")) {
-
-            $product->price = $request->get("price");
-            $message = "Price updated";
-        }
-        if ($request->get("branch_id")) {
-
-            $product->branch_id = $request->get("branch_id");
-            $message = "Branch id updated";
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
         }
 
-        $product->save();
+
+        // All good so update order and order detail
+        $order = Order::find($request->get('order_id'));
+        $order->status = 1;
+        $order->save();
+
+        $order_detail = $order->detail;
+        $order_detail->delivery_is_now = $request->get("delivery_is_now");
+        $order_detail->delivery_date = $request->get("delivery_date");
+        $order_detail->address = $request->get("address");
+        $order_detail->address = $request->get("notes");
+        $order_detail->save();
 
         return new JsonResponse([
             "error" => false,
-            'message' => $message,
-            "category" => $product
+            'message' => "Your order is completed!",
+            "category" => $order_detail
         ]);
 
     }
@@ -171,14 +193,16 @@ class OrderController extends Controller
 
 
         // All good so update category
-        $product = Product::find($request->get('product_id'));
-        $product->delete();
+        $order = Order::find($request->get('order_id'));
+        $order->detail->delete();
+        $order->products->delete();
+        $order->delete();
 
 
         return new JsonResponse([
             "error" => false,
-            'message' => $product->name . " is soft deleted",
-            "category" => $product
+            'message' => "Selected order is soft deleted",
+            "category" => $order
         ]);
 
     }
