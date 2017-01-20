@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Gelsin\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,17 @@ use Illuminate\Http\Exception\HttpResponseException;
 
 class AuthController extends Controller
 {
+    protected $user;
+
+    /**
+     * AuthController constructor.
+     * @param User $user
+     */
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
     /**
      * Handle a login request to the application.
      *
@@ -156,6 +168,7 @@ class AuthController extends Controller
     /**
      * Register new user.
      * @param Request $request
+     * @return JsonResponse
      */
     public function register(Request $request)
     {
@@ -165,6 +178,12 @@ class AuthController extends Controller
             'password' => 'required',
             'username' => 'required',
         ]);
-        $this->user->create($request);
+
+        $this->user->create($request->all());
+
+        return new JsonResponse([
+            "error" => false,
+            'message' => 'user created',
+        ]);    
     }
 }
