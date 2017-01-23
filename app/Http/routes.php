@@ -43,6 +43,11 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Branch Services
     $app->get('/branches', 'BranchController@index');
+    $app->get('/addresses', 'BranchAddressController@index');
+    $app->get('/branch/{address_id}', 'BranchAddressController@showBranch');
+
+
+
 
 
     // -- Admin Services
@@ -52,6 +57,8 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/branch/add', 'BranchController@create');
         $app->post('/branch/update', 'BranchController@update');
         $app->post('/branch/delete', 'BranchController@delete');
+        $app->post('/branch/address/add', 'BranchAddressController@create');
+
 
 
         // -- Category services

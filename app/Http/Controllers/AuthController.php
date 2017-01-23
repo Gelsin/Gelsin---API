@@ -179,11 +179,14 @@ class AuthController extends Controller
             'username' => 'required',
         ]);
 
-        $this->user->create($request->all());
+        $this->user->email = $request->get("email");
+        $this->user->password = app('hash')->make($request->get("password"));
+        $this->user->username = $request->get("username");
+        $this->user->save();
 
         return new JsonResponse([
             "error" => false,
             'message' => 'user created',
-        ]);    
+        ]);
     }
 }
