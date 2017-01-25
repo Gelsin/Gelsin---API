@@ -32,22 +32,19 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     });
 
 
-
     // -- Categories Services
     $app->get('/categories', 'CategoryController@index');
 
     // -- Product Services
     $app->get('/products', 'ProductController@index');
     $app->get('/products/{product_id}', 'ProductController@show');
+    $app->get('/product/image/{product_id}', 'ProductController@showImage');
 
 
     // -- Branch Services
     $app->get('/branches', 'BranchController@index');
     $app->get('/addresses', 'BranchAddressController@index');
     $app->get('/branch/{address_id}', 'BranchAddressController@showBranch');
-
-
-
 
 
     // -- Admin Services

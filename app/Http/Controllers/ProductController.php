@@ -13,6 +13,7 @@ use App\Gelsin\Models\Category;
 use App\Gelsin\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -89,10 +90,19 @@ class ProductController extends Controller
             'name' => 'required',
             'quantity' => 'required',
             'price' => 'required',
+            'branch_id' => 'required',
+            'cover' => 'required|image|mimes:jpeg,jpg|dimensions:width=500,height=500',
         ];
 
+        $messages = [
+
+            'cover.dimensions' => "image dimensions should be 500 x 500 (px)"
+
+        ];
+
+
         // -- Validate and display error messages
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             return new JsonResponse([
                 "error" => true,
@@ -100,8 +110,22 @@ class ProductController extends Controller
             ]);
         }
 
-        // All good so create new category
-        $product = Product::create($request->all());
+        // Get Image File
+        $file = $request->file('cover');
+        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+        // Move Image to the related folder
+        $file->move("images/uploads/products/", $fileName);
+
+        // All good so create new product
+        $product = new Product();
+        $product->name = $request->get("name");
+        $product->category_id = $request->get("category_id");
+        $product->branch_id = $request->get("branch_id");
+        $product->quantity = $request->get("quantity");
+        $product->price = $request->get("price");
+        $product->cover = $fileName;
+        $product->save();
+
 
         return new JsonResponse([
             "error" => false,
@@ -138,6 +162,29 @@ class ProductController extends Controller
 
     }
 
+    /**
+     * Show product.
+     * @param $product_id
+     * @return JsonResponse
+     */
+    public function showImage($product_id)
+    {
+        // All good so get product
+        $product = Product::find($product_id);
+
+        if (!$product->cover) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'product has no cover',
+                "product" => $product
+            ]);
+
+        }
+
+        return view("image", ['image' => $product->cover]);
+    }
+
 
     /**
      * Update category.
@@ -146,6 +193,26 @@ class ProductController extends Controller
      */
     public function update(Request $request)
     {
+
+        // -- define required parameters
+        $rules = [
+            'cover' => 'required|image|mimes:jpeg,jpg|dimensions:width=500,height=500',
+        ];
+
+        $messages = [
+
+            'cover.dimensions' => "image dimensions should be 500 x 500 (px)"
+
+        ];
+
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
+        }
 
         // All good so update product
         $product = Product::find($request->get('product_id'));
@@ -173,6 +240,20 @@ class ProductController extends Controller
 
             $product->branch_id = $request->get("branch_id");
             $message = "Branch id updated";
+        }
+        if ($request->file("cover")) {
+
+            // first delete old image
+            File::Delete('images/uploads/products/' . $product->cover);
+
+            // Get Image File
+            $file = $request->file('cover');
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+            // Move Image to the related folder
+            $file->move("images/uploads/products/", $fileName);
+            $product->cover = $fileName;
+
+            $message = "Cover updated";
         }
 
         $product->save();
@@ -205,6 +286,15 @@ class ProductController extends Controller
             "category" => $product
         ]);
 
+    }
+
+    /**
+     * @param null $path
+     * @return string
+     */
+    function public_path($path = null)
+    {
+        return rtrim(app()->basePath('public/' . $path), '/');
     }
 
 
