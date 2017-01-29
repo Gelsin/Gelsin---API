@@ -16,6 +16,8 @@ class Product extends Model
     use SoftDeletes;
 
     protected $table = 'products';
+    protected $cover_url;
+
 
     /**
      * The attributes that are mass assignable.
@@ -38,6 +40,9 @@ class Product extends Model
      */
     protected $hidden = [
         'deleted_at',
+        'updated_at',
+        'created_at',
+        'sub_category_id',
     ];
 
     /**
@@ -50,14 +55,18 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+
+    protected $appends = ['cover_url'];
+
     /**
-     * Get product images
+     * Get full url of cover image
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return string
      */
-    public function images()
+    public function getCoverUrlAttribute()
     {
-        return $this->hasMany(ProductImage::class, 'product_id');
+
+        return url() . "/api/product/image/" . $this->id;
     }
 
 

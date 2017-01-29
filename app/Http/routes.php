@@ -29,6 +29,12 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->get('/orders', 'OrderController@index');
         $app->POST('/order/update', 'OrderController@update');
 
+        // -- Address Services
+        $app->get('/address', 'AddressController@index');
+        $app->POST('/address/add', 'AddressController@update');
+        $app->POST('/address/update', 'AddressController@update');
+        $app->POST('/address/delete', 'AddressController@delete');
+
     });
 
 
