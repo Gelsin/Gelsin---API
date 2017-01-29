@@ -157,6 +157,7 @@ class ProductController extends Controller
         return new JsonResponse([
             "error" => false,
             'message' => 'success!',
+            "product_cover_link" => url() . "/api/product/image/" . $product->id,
             "product" => $product
         ]);
 
