@@ -76,4 +76,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Order::class, 'customer_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id');
+    }
+
 }

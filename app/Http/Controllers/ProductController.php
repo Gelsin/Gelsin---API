@@ -130,7 +130,7 @@ class ProductController extends Controller
         return new JsonResponse([
             "error" => false,
             'message' => 'success!',
-            "category" => $product
+            "product" => $product
         ]);
 
     }

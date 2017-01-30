@@ -30,8 +30,8 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->POST('/order/update', 'OrderController@update');
 
         // -- Address Services
-        $app->get('/address', 'AddressController@index');
-        $app->POST('/address/add', 'AddressController@update');
+        $app->get('/addresses', 'AddressController@index');
+        $app->POST('/address/add', 'AddressController@create');
         $app->POST('/address/update', 'AddressController@update');
         $app->POST('/address/delete', 'AddressController@delete');
 
@@ -49,7 +49,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Branch Services
     $app->get('/branches', 'BranchController@index');
-    $app->get('/addresses', 'BranchAddressController@index');
+    $app->get('/branch/addresses', 'BranchAddressController@index');
     $app->get('/branch/{address_id}', 'BranchAddressController@showBranch');
 
 
