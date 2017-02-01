@@ -37,6 +37,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+        'confirmed_at',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'remember_token',
+        'email_confirmation',
     ];
 
     /**
@@ -68,6 +74,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
+     * @return mixed
+     */
+    public static function isCustomer()
+    {
+        return static::where('is_customer', 1);
+    }
+
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orders()
@@ -82,6 +97,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function addresses()
     {
         return $this->hasMany(Address::class, 'user_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function customerDetail()
+    {
+        return $this->hasOne(Customer::class, 'user_id');
     }
 
 }

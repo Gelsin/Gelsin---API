@@ -343,6 +343,7 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'AddAddressLineToBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_115611_add_address_line_to_branches_table.php',
         'AddBranchAddressIdToAddressesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_30_214509_add_branch_address_id_to_addresses_table.php',
         'AddBranchIdToProductsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_124454_add_branch_id_to_products_table.php',
+        'AddContactToCustomersTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_31_214741_add_contact_to_customers_table.php',
         'AddCoverToProductsTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_24_120652_add_cover_to_products_table.php',
         'AddLatitudeToBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_114637_add_latitude_to_branches_table.php',
         'AddNameToBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_114325_add_name_to_branches_table.php',

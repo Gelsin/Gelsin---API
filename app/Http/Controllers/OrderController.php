@@ -42,7 +42,7 @@ class OrderController extends Controller
 
             return new JsonResponse([
                 "error" => true,
-                'message' => "youu don't have any orders",
+                'message' => "you don't have any orders",
                 'orders' => $orders,
             ]);
 

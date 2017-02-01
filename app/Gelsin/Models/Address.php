@@ -23,6 +23,18 @@ class Address extends Model
      */
     protected $fillable = ['user_id', 'address_line', 'branch_address_id'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+        'region_name',
+    ];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -31,6 +43,4 @@ class Address extends Model
     {
         return $this->belongsTo(BranchAdress::class, "branch_address_id");
     }
-
-
 }

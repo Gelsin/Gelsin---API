@@ -25,6 +25,12 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->GET('/auth/user', 'AuthController@getUser');
         $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
         $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
+
+        // -- User Settings Services
+        $app->get('/profile', 'UserController@index');
+        $app->POST('/profile/update', 'UserController@update');
+        $app->POST('/profile/delete', 'UserController@delete');
+
         // -- Order Services
         $app->get('/orders', 'OrderController@index');
         $app->POST('/order/update', 'OrderController@update');

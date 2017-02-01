@@ -67,8 +67,6 @@ class AddressController extends Controller
         ]);
 
     }
-
-
     /**
      * Update  Address.
      * @param Request $request

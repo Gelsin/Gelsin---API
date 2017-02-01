@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Gelsin\Models\Customer;
 use App\Gelsin\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -10,19 +11,25 @@ use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Http\Exception\HttpResponseException;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class AuthController extends Controller
 {
     protected $user;
+    protected $customer;
+
 
     /**
      * AuthController constructor.
      * @param User $user
+     * @param Customer $customer
      */
-    public function __construct(User $user)
+    public function __construct(User $user, Customer $customer)
     {
         $this->user = $user;
+        $this->customer = $customer;
     }
 
     /**
@@ -159,9 +166,28 @@ class AuthController extends Controller
      */
     public function getUser()
     {
+        $user = JWTAuth::parseToken()->authenticate();
+
+        if ($user->is_customer == 1) {
+
+            $error = false;
+            $message = "authenticated user is customer";
+            $user->customerDetail;
+        } else if ($user->is_customer == 0) {
+
+            $error = false;
+            $message = "authenticated user is seller";
+        } else {
+            $error = true;
+            $message = "user type is not defined";
+        }
+
+
+
         return new JsonResponse([
-            'message' => 'authenticated_user',
-            'data' => JWTAuth::parseToken()->authenticate()
+            'error' => $error,
+            'message' => $message,
+            'user' => $user
         ]);
     }
 
@@ -173,16 +199,37 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-        $this->validate($request, [
-            'email'    => 'required|email|max:255',
-            'password' => 'required',
-            'username' => 'required',
-        ]);
+        // -- define required parameters
+        $rules = [
+            'email' => 'required|unique:users|email|max:255',
+            'password' => 'required|min:6',
+            'confirm_password' => 'min:6|same:password',
+            'username' => 'required| unique:users',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'contact' => 'required',
+        ];
+
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->first()
+            ]);
+        }
+
 
         $this->user->email = $request->get("email");
         $this->user->password = app('hash')->make($request->get("password"));
         $this->user->username = $request->get("username");
         $this->user->save();
+
+        $this->customer->user_id = $this->user->id;
+        $this->customer->first_name = $request->get("first_name");
+        $this->customer->last_name = $request->get("last_name");
+        $this->customer->contact = $request->get("contact");
+        $this->customer->save();
 
         return new JsonResponse([
             "error" => false,

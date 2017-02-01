@@ -25,6 +25,18 @@ class BranchAdress extends Model
      */
     protected $fillable = ['street_name', 'street_line_extra', 'branch_id'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+        'street_line_extra',
+    ];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
