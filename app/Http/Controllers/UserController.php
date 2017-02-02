@@ -89,16 +89,26 @@ class UserController extends Controller
 
         if ($user->is_customer == 1) {
 
-            $user->email = $request->get('email');
-            $user->username = $request->get('username');
+            if ($request->get('email')) {
+                $user->email = $request->get('email');
+            }
+            if ($request->get('username')) {
+                $user->username = $request->get('username');
+            }
             $user->save();
 
             $customer_detail = $user->customerDetail;
-            $customer_detail->first_name = $request->get("first_name");
-            $customer_detail->last_name = $request->get("last_name");
-            $customer_detail->contact = $request->get("contact");
-            $customer_detail->save();
+            if ($request->get('first_name')) {
+                $customer_detail->first_name = $request->get('first_name');
+            }
+            if ($request->get('last_name')) {
+                $customer_detail->last_name = $request->get('last_name');
+            }
+            if ($request->get('contact')) {
+                $customer_detail->contact = $request->get('contact');
+            }
 
+            $customer_detail->save();
             $error = false;
             $message = "Your profile is updated!";
             $user->customerDetail;

@@ -92,13 +92,15 @@ class OrderController extends Controller
         // All good so create new order
         $products = $request->get("products");
 
-
         $order = new Order();
         $order->customer_id = $user->id;
         $order->save();
 
         foreach ($products as $product) {
 
+            $total_price[] = $product['price'];
+
+            // -- Save order
             $order_product = new OrderProduct();
             $order_product->order_id = $order->id;
             $order_product->product_id = $product['product_id'];
@@ -106,7 +108,18 @@ class OrderController extends Controller
             $order_product->quantity = $product['quantity'];
             $order_product->save();
 
+            // -- Update product in stock
+            $product = $order_product->relatedProduct;
+            $product->quantity = $product->quantity - $order_product->quantity;
+            $product->save();
+
         }
+
+        // update total price
+        $order->total_price = array_sum($total_price);
+        $order->save();
+
+
 
         $order_detail = new OrderDetail();
         $order_detail->order_id = $order->id;
@@ -115,6 +128,9 @@ class OrderController extends Controller
         $order_detail->address = $request->get("address");
         $order_detail->notes = $request->get("notes");
         $order_detail->save();
+
+        $order->detail;
+        $order->products;
 
 
         if (!$order) {
@@ -130,9 +146,7 @@ class OrderController extends Controller
         return new JsonResponse([
             "error" => false,
             'message' => 'order is completed!',
-            'order_id' => $order->id,
-            "details" => $order->detail,
-            "products" => $order->products
+            'order' => $order,
         ]);
 
     }
