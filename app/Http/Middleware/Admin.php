@@ -9,7 +9,7 @@
 namespace App\Http\Middleware;
 
 
-use Exception;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\JsonResponse;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -65,6 +65,13 @@ class Admin
                 "error" => true,
                 'message' => 'token_expired',
             ]);
+        } catch (JWTException $e) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'token_absent',
+            ]);
+
         }
 
 

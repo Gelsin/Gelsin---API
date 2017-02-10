@@ -25,6 +25,17 @@ class Category extends Model
      */
     protected $fillable = ['name', 'parent_id'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+        'created_at',
+    ];
+
 
     /**
      * The attributes that should be mutated to dates.

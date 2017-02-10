@@ -33,6 +33,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
         // -- Order Services
         $app->get('/orders', 'OrderController@index');
+        $app->post('/order/add', 'OrderController@create');
         $app->POST('/order/update', 'OrderController@update');
 
         // -- Address Services
@@ -46,6 +47,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Categories Services
     $app->get('/categories', 'CategoryController@index');
+    $app->get('categories/{id}', 'CategoryController@show');
 
     // -- Product Services
     $app->get('/products', 'ProductController@index');
@@ -82,7 +84,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/product/delete', 'ProductController@delete');
 
         // -- Order services
-        $app->post('/order/add', 'OrderController@create');
+        $app->get('/orders', 'Admin\OrderController@index');
         $app->post('/order/update', 'ProductController@update');
         $app->post('/order/delete', 'ProductController@delete');
 
