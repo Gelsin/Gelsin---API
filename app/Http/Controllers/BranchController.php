@@ -12,6 +12,8 @@ namespace App\Http\Controllers;
 use App\Gelsin\Models\Branch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 
 class BranchController extends Controller
@@ -46,12 +48,22 @@ class BranchController extends Controller
     {
 
 
-        // -- First  Validate
-        $this->validate($request, [
+        // -- define required parameters
+        $rules = [
             'name' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-        ]);
+            'address_line' => 'required',
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->all()
+            ]);
+        }
+
 
         // All good so create new branch
         $branch = Branch::create($request->all());

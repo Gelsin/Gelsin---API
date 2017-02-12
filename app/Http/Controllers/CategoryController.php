@@ -41,6 +41,20 @@ class CategoryController extends Controller
         ]);
     }
 
+
+    public function showParents(Request $request)
+    {
+
+        $categories = Category::where('parent_id', '=', 0)->get();
+
+
+        return new JsonResponse([
+            "error" => false,
+            "message" => "success",
+            'categoryTree' => $categories,
+        ]);
+    }
+
     /**
      * Show  category and its childs.
      * @param $id
@@ -75,8 +89,9 @@ class CategoryController extends Controller
 
             return new JsonResponse([
                 "error" => false,
+                'category' => $category->name,
                 'message' => 'This category has no childs!',
-                "category" => $category
+
 
             ]);
 
@@ -85,8 +100,8 @@ class CategoryController extends Controller
         // All good so get category with childs
         return new JsonResponse([
             "error" => false,
-            'message' => 'This category is parent category!',
-            "category" => $category
+            'message' => 'These categories are child category of ' . $category->name,
+            "category" => $category->childs
         ]);
 
     }

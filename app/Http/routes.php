@@ -47,6 +47,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Categories Services
     $app->get('/categories', 'CategoryController@index');
+    $app->get('categories/parents', 'CategoryController@showParents');
     $app->get('categories/{id}', 'CategoryController@show');
 
     // -- Product Services
@@ -69,6 +70,8 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/branch/update', 'BranchController@update');
         $app->post('/branch/delete', 'BranchController@delete');
         $app->post('/branch/address/add', 'BranchAddressController@create');
+        $app->get('/branch/{branch_id}', 'Admin\BranchAddressController@index');
+
 
 
 

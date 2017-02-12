@@ -26,4 +26,12 @@ class Branch extends Model
      */
     protected $fillable = ['name', 'market_id', 'address_line', 'latitude', 'longitude'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function addresses()
+    {
+        return $this->hasMany(BranchAdress::class, "branch_id");
+    }
+
 }
