@@ -132,11 +132,14 @@ class BranchController extends Controller
         $branch = Branch::find($request->get('branch_id'));
         $branch->delete();
 
+        foreach ($branch->addresses as $address) {
+            $address->delete();
+        }
 
         return new JsonResponse([
             "error" => false,
             'message' => $branch->name . " is soft deleted",
-            "category" => $branch
+            "branch" => $branch
         ]);
 
     }

@@ -95,9 +95,7 @@ class ProductController extends Controller
         ];
 
         $messages = [
-
             'cover.dimensions' => "image dimensions should be 500 x 500 (px)"
-
         ];
 
 
@@ -182,7 +180,11 @@ class ProductController extends Controller
 
         }
 
-        return view("image", ['image' => $product->cover]);
+        $path = $this->public_path('images/uploads/products/' . $product->cover);
+        $image = response()->download($path, $product->cover);
+
+        return $image;
+
     }
 
 
@@ -294,7 +296,8 @@ class ProductController extends Controller
      */
     function public_path($path = null)
     {
-        return rtrim(app()->basePath('public/' . $path), '/');
+
+        return rtrim(app()->basePath('' . $path), '/');
     }
 
 

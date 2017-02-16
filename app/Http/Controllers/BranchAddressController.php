@@ -78,7 +78,6 @@ class BranchAddressController extends Controller
         $this->validate($request, [
             'street_name' => 'required',
             'branch_id' => 'required',
-
         ]);
 
         // All good so create new branch address
@@ -103,7 +102,7 @@ class BranchAddressController extends Controller
 
 
         // All good so update branch
-        $address = BranchAdress::find($request->get('branch_address_id'));
+        $address = BranchAdress::find($request->get('address_id'));
         if ($request->get("street_name")) {
 
             $address->street_name = $request->get("street_name");
@@ -141,15 +140,15 @@ class BranchAddressController extends Controller
     {
 
 
-        // All good so delete category and its relations
-        $branch = BranchAdress::find($request->get('branch_address_id'));
-        $branch->delete();
+        // All good so delete branch address and its relations
+        $branch_address = BranchAdress::find($request->get('address_id'));
+        $branch_address->delete();
 
 
         return new JsonResponse([
             "error" => false,
-            'message' => $branch->name . " is soft deleted",
-            "category" => $branch
+            'message' => $branch_address->name . " is soft deleted",
+            "category" => $branch_address
         ]);
 
     }

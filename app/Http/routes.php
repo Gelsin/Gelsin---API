@@ -69,10 +69,12 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/branch/add', 'BranchController@create');
         $app->post('/branch/update', 'BranchController@update');
         $app->post('/branch/delete', 'BranchController@delete');
-        $app->post('/branch/address/add', 'BranchAddressController@create');
+
+        // -- Branch Address routes
         $app->get('/branch/{branch_id}', 'Admin\BranchAddressController@index');
-
-
+        $app->post('/branch/address/add', 'BranchAddressController@create');
+        $app->post('/branch/address/update', 'BranchAddressController@update');
+        $app->post('/branch/address/delete', 'BranchAddressController@delete');
 
 
         // -- Category services
@@ -87,10 +89,11 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/product/delete', 'ProductController@delete');
 
         // -- Order services
-        $app->get('/orders', 'Admin\OrderController@index');
-        $app->post('/order/update', 'ProductController@update');
+        $app->get('/orders/', 'Admin\OrderController@index');
+        $app->get('/orders/{status}', 'Admin\OrderController@index');
+        $app->get('/order/{order_id}', 'Admin\OrderController@show');
+        $app->post('/order/update/status', 'Admin\OrderController@update');
         $app->post('/order/delete', 'ProductController@delete');
-
 
     });
 

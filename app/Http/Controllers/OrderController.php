@@ -179,7 +179,7 @@ class OrderController extends Controller
 
         // All good so update order and order detail
         $order = Order::find($request->get('order_id'));
-        $order->status = 1;
+        $order->status = 0;
         $order->save();
 
         $order_detail = $order->detail;

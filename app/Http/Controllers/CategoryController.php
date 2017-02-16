@@ -47,7 +47,6 @@ class CategoryController extends Controller
 
         $categories = Category::where('parent_id', '=', 0)->get();
 
-
         return new JsonResponse([
             "error" => false,
             "message" => "success",
@@ -75,7 +74,6 @@ class CategoryController extends Controller
 
         // Get category
         $category = Category::find($id);
-
         if (!$category) {
 
             return new JsonResponse([
@@ -85,23 +83,23 @@ class CategoryController extends Controller
 
         }
 
+        $category->childs;
         if ($category->childs->count() < 1) {
 
             return new JsonResponse([
                 "error" => false,
-                'category' => $category->name,
                 'message' => 'This category has no childs!',
-
-
+                'category' => $category,
             ]);
 
         }
+
 
         // All good so get category with childs
         return new JsonResponse([
             "error" => false,
             'message' => 'These categories are child category of ' . $category->name,
-            "category" => $category->childs
+            "category" => $category
         ]);
 
     }
