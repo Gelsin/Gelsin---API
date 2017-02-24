@@ -49,6 +49,8 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     $app->get('/categories', 'CategoryController@index');
     $app->get('categories/parents', 'CategoryController@showParents');
     $app->get('categories/{id}', 'CategoryController@show');
+    $app->get('category/image/{category_id}', 'CategoryController@showImage');
+
 
     // -- Product Services
     $app->get('/products', 'ProductController@index');
@@ -60,6 +62,10 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     $app->get('/branches', 'BranchController@index');
     $app->get('/branch/addresses', 'BranchAddressController@index');
     $app->get('/branch/{address_id}', 'BranchAddressController@showBranch');
+
+    // -- Brand Services
+    $app->get('/brands', 'BrandController@index');
+    $app->get('/brand/{brand_id}', 'BrandController@show');
 
 
     // -- Admin Services
@@ -77,6 +83,12 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->post('/branch/address/delete', 'BranchAddressController@delete');
 
 
+        // -- Brand services
+        $app->post('/brand/add', 'BrandController@create');
+        $app->post('/brand/update', 'BrandController@update');
+        $app->post('/brand/delete', 'BrandController@delete');
+
+
         // -- Category services
         $app->post('/category/add', 'CategoryController@create');
         $app->post('/category/update', 'CategoryController@update');
@@ -84,6 +96,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
 
         // -- Product services
+        $app->get('/products', 'Admin\ProductController@index');
         $app->post('/product/add', 'ProductController@create');
         $app->post('/product/update', 'ProductController@update');
         $app->post('/product/delete', 'ProductController@delete');

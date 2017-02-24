@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBranchAddressIdToAddressesTable extends Migration
+class AddCategoryIdToPrBrandsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddBranchAddressIdToAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::table('addresses', function (Blueprint $table) {
+        Schema::table('pr_brands', function (Blueprint $table) {
             //
-            $table->integer('branch_address_id');
+            $table->integer('category_id');
 
         });
     }
@@ -27,9 +27,8 @@ class AddBranchAddressIdToAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::table('addresses', function (Blueprint $table) {
+        Schema::table('pr_brands', function (Blueprint $table) {
             //
-            $table->drop('branch_address_id');
         });
     }
 }

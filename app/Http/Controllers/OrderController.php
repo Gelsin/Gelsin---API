@@ -88,7 +88,6 @@ class OrderController extends Controller
         }
 
 
-
         // All good so create new order
         $products = $request->get("products");
 
@@ -98,7 +97,7 @@ class OrderController extends Controller
 
         foreach ($products as $product) {
 
-            $total_price[] = $product['price'];
+            $total_price[] = $product['price'] * $product['quantity'];
 
             // -- Save order
             $order_product = new OrderProduct();

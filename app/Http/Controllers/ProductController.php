@@ -55,26 +55,38 @@ class ProductController extends Controller
             ]);
         }
 
-
         $category_id = $request->get("category_id");
         $branch_id = $request->get("branch_id");
+        $brand_id = $request->get("brand_id");
 
-        $products = Category::find($category_id)->products->where("branch_id", $branch_id);
+        $category = Category::find($category_id);
+        if (isset($brand_id)) {
+            $products = $category->products->where('branch_id', $branch_id)->where('brand_id', $brand_id);
+        } else {
+            $products = $category->products->where('branch_id', $branch_id);
+        }
+        foreach ($products as $product) {
+            $product->branch;
+            $product->category;
+        }
 
         if ($products->count() < 1) {
 
             return new JsonResponse([
                 "error" => true,
-                "message" => "No product on this branch!",
+                "message" => "No related products!",
             ]);
+
         }
+
 
         return new JsonResponse([
             "error" => false,
-            "message" => "success",
-            'products' => $products,
+            "message" => "Products are listed below.",
+            'products' => $products
         ]);
     }
+
 
     /**
      * Create  new product.
@@ -91,7 +103,8 @@ class ProductController extends Controller
             'quantity' => 'required',
             'price' => 'required',
             'branch_id' => 'required',
-            'cover' => 'required|image|mimes:jpeg,jpg|dimensions:width=500,height=500',
+            'brand_id' => 'required',
+            'cover' => 'required|image|mimes:jpeg,jpg,png|dimensions:width=500,height=500',
         ];
 
         $messages = [
@@ -114,11 +127,29 @@ class ProductController extends Controller
         // Move Image to the related folder
         $file->move("images/uploads/products/", $fileName);
 
+        $category = Category::find($request->get("category_id"));
+        if ($category->parent) {
+            $parent = $category->parent;
+
+            // Create new product for parent category
+            $product = new Product();
+            $product->name = $request->get("name");
+            $product->category_id = $parent->id;
+            $product->branch_id = $request->get("branch_id");
+            $product->brand_id = $request->get("brand_id");
+            $product->quantity = $request->get("quantity");
+            $product->price = $request->get("price");
+            $product->cover = $fileName;
+            $product->save();
+
+        }
+
         // All good so create new product
         $product = new Product();
         $product->name = $request->get("name");
         $product->category_id = $request->get("category_id");
         $product->branch_id = $request->get("branch_id");
+        $product->brand_id = $request->get("brand_id");
         $product->quantity = $request->get("quantity");
         $product->price = $request->get("price");
         $product->cover = $fileName;
@@ -198,7 +229,7 @@ class ProductController extends Controller
 
         // -- define required parameters
         $rules = [
-            'cover' => 'required|image|mimes:jpeg,jpg|dimensions:width=500,height=500',
+            'cover' => 'image|mimes:jpeg,jpg,png|dimensions:width=500,height=500',
         ];
 
         $messages = [
@@ -243,6 +274,11 @@ class ProductController extends Controller
             $product->branch_id = $request->get("branch_id");
             $message = "Branch id updated";
         }
+        if ($request->get("brand_id")) {
+
+            $product->brand_id = $request->get("brand_id");
+            $message = "Brand id updated";
+        }
         if ($request->file("cover")) {
 
             // first delete old image
@@ -279,8 +315,9 @@ class ProductController extends Controller
 
         // All good so update category
         $product = Product::find($request->get('product_id'));
-        $product->delete();
+        File::Delete('images/uploads/products/' . $product->cover);
 
+        $product->delete();
 
         return new JsonResponse([
             "error" => false,
@@ -297,7 +334,7 @@ class ProductController extends Controller
     function public_path($path = null)
     {
 
-        return rtrim(app()->basePath('' . $path), '/');
+        return rtrim(app()->basePath('public/' . $path), '/');
     }
 
 

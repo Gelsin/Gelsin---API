@@ -17,6 +17,8 @@ class Category extends Model
 
 
     protected $table = 'categories';
+    protected $cover_url;
+    protected $appends = ['cover_url'];
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +37,6 @@ class Category extends Model
         'updated_at',
         'created_at',
     ];
-
 
     /**
      * The attributes that should be mutated to dates.
@@ -71,5 +72,24 @@ class Category extends Model
     }
 
 
+    /**
+     * Get category brands.
+     *
+     * @return string
+     */
+    public function brands()
+    {
+        return $this->hasMany(ProductBrand::class, 'category_id');
+    }
+
+    /**
+     * Get full url of cover image
+     *
+     * @return string
+     */
+    public function getCoverUrlAttribute()
+    {
+        return url() . "/api/category/image/" . $this->id;
+    }
 
 }

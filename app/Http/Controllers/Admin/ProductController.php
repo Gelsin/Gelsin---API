@@ -1,49 +1,54 @@
 <?php
-
 /**
  * Created by PhpStorm.
  * User: alirzayev
- * Date: 06/02/2017
- * Time: 04:53
+ * Date: 18/02/2017
+ * Time: 16:51
  */
+
 namespace App\Http\Controllers\Admin;
 
+use App\Gelsin\Models\Category;
 use App\Gelsin\Models\Order;
+use App\Gelsin\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
-class OrderController extends Controller
+class ProductController extends Controller
 {
 
     /**
-     * @param null $status
+     * @param Request $request
      * @return JsonResponse
+     * @internal param null $status
      */
-    public function index($status = null)
+    public function index(Request $request)
     {
 
-        $orders = Order::where('status', '=', $status)->get();
 
-        if (!isset($status)) {
-            $orders = Order::all();
+        $category_id = $request->get("category_id");
+        $branch_id = $request->get("branch_id");
+
+        if (!$category_id and !$branch_id) {
+            $products = Product::all();
+        } else {
+            $category = Category::find($category_id);
+            $products = $category->products->where('branch_id', $branch_id);
         }
 
-        foreach ($orders as $order) {
-
-            $order->detail;
-            $order->customer;
-
-            foreach ($order->products as $product) {
-                $product->relatedProduct;
-            }
+        foreach ($products as $product) {
+            $product->branch;
+            $product->category;
         }
+
 
         return new JsonResponse([
             "error" => false,
-            'message' => 'Orders are listed below.',
-            'orders' => $orders,
+            "message" => "Products are listed below.",
+            'products' => $products
         ]);
     }
 

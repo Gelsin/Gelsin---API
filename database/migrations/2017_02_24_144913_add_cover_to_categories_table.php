@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBranchAddressIdToAddressesTable extends Migration
+class AddCoverToCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddBranchAddressIdToAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::table('addresses', function (Blueprint $table) {
-            //
-            $table->integer('branch_address_id');
+        Schema::table('categories', function (Blueprint $table) {
 
+            $table->string('cover');
         });
     }
 
@@ -27,9 +26,8 @@ class AddBranchAddressIdToAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::table('addresses', function (Blueprint $table) {
+        Schema::table('categories', function (Blueprint $table) {
             //
-            $table->drop('branch_address_id');
         });
     }
 }

@@ -55,6 +55,16 @@ class Product extends Model
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    /**
+     * Get product category.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
 
     protected $appends = ['cover_url'];
 

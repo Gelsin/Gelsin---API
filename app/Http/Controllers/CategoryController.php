@@ -13,6 +13,8 @@ use App\Gelsin\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
+
 
 
 class CategoryController extends Controller
@@ -32,6 +34,8 @@ class CategoryController extends Controller
 
         foreach ($categories as $category) {
             $category->childs;
+            $category->brands;
+
         }
 
         return new JsonResponse([
@@ -74,6 +78,7 @@ class CategoryController extends Controller
 
         // Get category
         $category = Category::find($id);
+        $category->brands;
         if (!$category) {
 
             return new JsonResponse([
@@ -104,6 +109,32 @@ class CategoryController extends Controller
 
     }
 
+    /**
+     * Show category image.
+     * @param $category_id
+     * @return JsonResponse
+     */
+    public function showImage($category_id)
+    {
+        // All good so get product
+        $category = Category::find($category_id);
+
+        if (!$category->cover) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'product has no cover',
+                "product" => $category
+            ]);
+
+        }
+
+        $path = $this->public_path('images/uploads/categories/' . $category->cover);
+        $image = response()->download($path, $category->cover);
+
+        return $image;
+    }
+
 
     /**
      * Create  new category.
@@ -117,12 +148,15 @@ class CategoryController extends Controller
         $rules = [
             'name' => 'required',
             'parent_id' => 'required',
+            'cover' => 'required|image|mimes:jpeg,jpg,png|dimensions:width=500,height=500',
         ];
+
 
         // -- customize error messages
         $messages = [
             'name.required' => 'User id is required!',
             'parent_id.required' => 'Parent id is required!',
+            'cover.dimensions' => "image dimensions should be 500 x 500 (px)",
         ];
         // -- Validate and display error messages
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -132,6 +166,12 @@ class CategoryController extends Controller
                 "message" => $validator->errors()->all()
             ]);
         }
+
+        // Get Image File
+        $file = $request->file('cover');
+        $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+        // Move Image to the related folder
+        $file->move("images/uploads/categories/", $fileName);
 
         // All good so create new category
         $category = Category::create($request->all());
@@ -166,6 +206,23 @@ class CategoryController extends Controller
             $category->parent_id = $request->get("parent_id");
             $message = "Parent id updated";
         }
+        if ($request->file("cover")) {
+
+            // first delete old image
+            $imagePath = 'images/uploads/categories/' . $category->cover;
+            if (File::exists($imagePath)) {
+                File::Delete($imagePath);
+            }
+
+            // Get Image File
+            $file = $request->file('cover');
+            $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+            // Move Image to the related folder
+            $file->move("images/uploads/categories/", $fileName);
+            $category->cover = $fileName;
+
+            $message = "Cover updated";
+        }
         $category->save();
 
         return new JsonResponse([
@@ -188,6 +245,8 @@ class CategoryController extends Controller
 
         // All good so delete category and its relations
         $category = Category::find($request->get('category_id'));
+        // Delete image
+        File::Delete('images/uploads/categories/' . $category->cover);
         $category->products()->delete();
         $category->delete();
 
@@ -198,6 +257,16 @@ class CategoryController extends Controller
             "category" => $category
         ]);
 
+    }
+
+    /**
+     * @param null $path
+     * @return string
+     */
+    function public_path($path = null)
+    {
+
+        return rtrim(app()->basePath('public/' . $path), '/');
     }
 
 
