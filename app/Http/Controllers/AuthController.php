@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Gelsin\Helpers\SmsSender;
 use App\Gelsin\Models\Customer;
 use App\Gelsin\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -19,17 +21,20 @@ class AuthController extends Controller
 {
     protected $user;
     protected $customer;
+    protected $smsSender;
 
 
     /**
      * AuthController constructor.
      * @param User $user
      * @param Customer $customer
+     * @param SmsSender $smsSender
      */
-    public function __construct(User $user, Customer $customer)
+    public function __construct(User $user, Customer $customer, SmsSender $smsSender)
     {
         $this->user = $user;
         $this->customer = $customer;
+        $this->smsSender = $smsSender;
     }
 
     /**
@@ -60,6 +65,7 @@ class AuthController extends Controller
         // All good so return the token
         return $this->onAuthorized($token);
     }
+
     /**
      * Validate authentication request.
      *
@@ -203,10 +209,7 @@ class AuthController extends Controller
         $rules = [
             'email' => 'required|unique:users|email|max:255',
             'password' => 'required|min:6',
-            'confirm_password' => 'min:6|same:password',
-            'username' => 'required| unique:users',
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'fullname' => 'required',
             'contact' => 'required',
         ];
 
@@ -219,21 +222,67 @@ class AuthController extends Controller
             ]);
         }
 
-
+        $activation_code = rand(100000, 999999);
         $this->user->email = $request->get("email");
         $this->user->password = app('hash')->make($request->get("password"));
-        $this->user->username = $request->get("username");
+        $this->user->verification_code = $activation_code;
         $this->user->save();
 
         $this->customer->user_id = $this->user->id;
-        $this->customer->first_name = $request->get("first_name");
-        $this->customer->last_name = $request->get("last_name");
+        $this->customer->fullname = $request->get("fullname");
         $this->customer->contact = $request->get("contact");
         $this->customer->save();
 
+        // -- send sms with activation code
+        $this->smsSender->activation($this->customer, $activation_code);
+
+        $this->user->customerDetail;
+
         return new JsonResponse([
             "error" => false,
-            'message' => 'user created',
+            'message' => 'user is created and activation code has sent, successfully!',
+            'user' => $this->user,
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function activate(Request $request)
+    {
+        // -- define required parameters
+        $rules = [
+            'activation_code' => 'required|min:6|max:6',
+        ];
+
+        // -- Validate and display error messages
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => $validator->errors()->first()
+            ]);
+        }
+        $activationCode = $request->get('activation_code');
+        $user = JWTAuth::parseToken()->authenticate();
+
+        $user = $this->user->find($user->id);
+
+        if ($user && $user->verification_code === $activationCode) {
+            $user->confirmed_at = Carbon::now();
+            $user->save();
+
+            return new JsonResponse([
+                "error" => false,
+                'message' => 'Thanks! You have succesfull activated your account!',
+                'user' => $user,
+            ]);
+        }
+
+        return new JsonResponse([
+            "error" => true,
+            'message' => 'Verification code error. Please, Check your code!',
         ]);
     }
 }

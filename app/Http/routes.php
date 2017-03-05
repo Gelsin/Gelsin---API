@@ -23,6 +23,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     // -- Authenticated User Services
     $app->group(['middleware' => 'auth'], function ($app) {
         $app->GET('/auth/user', 'AuthController@getUser');
+        $app->post('/auth/user/activate', 'AuthController@activate');
         $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
         $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
 

@@ -41,13 +41,23 @@ class ProductBrand extends Model
     ];
 
     /**
-     * Get product category.
+     * Get brand products.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function products()
     {
         return $this->hasMany(Product::class, 'brand_id');
+    }
+
+    /**
+     * Get brand category.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
 

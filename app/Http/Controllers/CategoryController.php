@@ -118,20 +118,26 @@ class CategoryController extends Controller
     {
         // All good so get product
         $category = Category::find($category_id);
-
         if (!$category->cover) {
 
             return new JsonResponse([
                 "error" => true,
-                'message' => 'product has no cover',
-                "product" => $category
+                'message' => 'category has no cover',
             ]);
 
         }
 
-        $path = $this->public_path('images/uploads/categories/' . $category->cover);
-        $image = response()->download($path, $category->cover);
 
+        $path = $this->public_path('images/uploads/categories/' . $category->cover);
+        if (!file_exists($path)) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'no such file exists',
+            ]);
+
+        }
+        $image = response()->download($path, $category->cover);
         return $image;
     }
 
@@ -150,7 +156,6 @@ class CategoryController extends Controller
             'parent_id' => 'required',
             'cover' => 'required|image|mimes:jpeg,jpg,png|dimensions:width=500,height=500',
         ];
-
 
         // -- customize error messages
         $messages = [
@@ -171,10 +176,14 @@ class CategoryController extends Controller
         $file = $request->file('cover');
         $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
         // Move Image to the related folder
-        $file->move("images/uploads/categories/", $fileName);
+        $file->move("public/images/uploads/categories/", $fileName);
 
         // All good so create new category
-        $category = Category::create($request->all());
+        $category = new Category();
+        $category->name = $request->get('name');
+        $category->parent_id = $request->get('parent_id');
+        $category->cover = $fileName;
+        $category->save();
 
         return new JsonResponse([
             "error" => false,
@@ -209,7 +218,7 @@ class CategoryController extends Controller
         if ($request->file("cover")) {
 
             // first delete old image
-            $imagePath = 'images/uploads/categories/' . $category->cover;
+            $imagePath = 'public/images/uploads/categories/' . $category->cover;
             if (File::exists($imagePath)) {
                 File::Delete($imagePath);
             }
@@ -218,7 +227,7 @@ class CategoryController extends Controller
             $file = $request->file('cover');
             $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
             // Move Image to the related folder
-            $file->move("images/uploads/categories/", $fileName);
+            $file->move("public/images/uploads/categories/", $fileName);
             $category->cover = $fileName;
 
             $message = "Cover updated";
@@ -246,7 +255,7 @@ class CategoryController extends Controller
         // All good so delete category and its relations
         $category = Category::find($request->get('category_id'));
         // Delete image
-        File::Delete('images/uploads/categories/' . $category->cover);
+        File::Delete('public/images/uploads/categories/' . $category->cover);
         $category->products()->delete();
         $category->delete();
 

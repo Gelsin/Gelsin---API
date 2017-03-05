@@ -37,12 +37,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
-        'confirmed_at',
         'created_at',
         'updated_at',
         'deleted_at',
         'remember_token',
         'email_confirmation',
+        'verification_code',
     ];
 
     /**

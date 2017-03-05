@@ -13,7 +13,10 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '253c157292f75eb38082b5acb06f3f01' => __DIR__ . '/..' . '/nikic/fast-route/src/functions.php',
+        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'bee9632da3ca00a99623b9c35d0c4f8b' => __DIR__ . '/..' . '/laravel/lumen-framework/src/helpers.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -47,6 +50,7 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
         ),
         'N' => 
         array (
@@ -86,6 +90,12 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
             'Illuminate\\Broadcasting\\' => 24,
             'Illuminate\\Auth\\' => 16,
         ),
+        'G' =>
+            array(
+                'GuzzleHttp\\Psr7\\' => 16,
+                'GuzzleHttp\\Promise\\' => 19,
+                'GuzzleHttp\\' => 11,
+            ),
         'F' => 
         array (
             'FastRoute\\' => 10,
@@ -174,6 +184,10 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Http\\Message\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/psr/http-message/src',
+            ),
         'Namshi\\JOSE\\' => 
         array (
             0 => __DIR__ . '/..' . '/namshi/jose/src/Namshi/JOSE',
@@ -278,6 +292,18 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         array (
             0 => __DIR__ . '/..' . '/illuminate/auth',
         ),
+        'GuzzleHttp\\Psr7\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+            ),
+        'GuzzleHttp\\Promise\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
+            ),
+        'GuzzleHttp\\' =>
+            array(
+                0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+            ),
         'FastRoute\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
@@ -351,6 +377,7 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'AddLatitudeToBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_114637_add_latitude_to_branches_table.php',
         'AddNameToBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_114325_add_name_to_branches_table.php',
         'AddProductQuantityToBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_12_123522_add_product_quantity_to_branches_table.php',
+        'AddVerificationCodeToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_03_140935_add_verification_code_to_users_table.php',
         'CreateBranchAddressesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_23_122709_create_branch_addresses_table.php',
         'CreateBranchesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_03_212429_create_branches_table.php',
         'CreateCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_10_193053_create_categories_table.php',

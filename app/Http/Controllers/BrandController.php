@@ -24,6 +24,9 @@ class BrandController extends Controller
 
         $brands = ProductBrand::all();
 
+        foreach ($brands as $brand) {
+            $brand->category;
+        }
 
         return new JsonResponse([
             "error" => false,

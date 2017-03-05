@@ -125,7 +125,7 @@ class ProductController extends Controller
         $file = $request->file('cover');
         $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
         // Move Image to the related folder
-        $file->move("images/uploads/products/", $fileName);
+        $file->move("public/images/uploads/products/", $fileName);
 
         $category = Category::find($request->get("category_id"));
         if ($category->parent) {
@@ -198,7 +198,7 @@ class ProductController extends Controller
      */
     public function showImage($product_id)
     {
-        // All good so get product
+        // All good so show product image
         $product = Product::find($product_id);
 
         if (!$product->cover) {
@@ -282,13 +282,13 @@ class ProductController extends Controller
         if ($request->file("cover")) {
 
             // first delete old image
-            File::Delete('images/uploads/products/' . $product->cover);
+            File::Delete('public/images/uploads/products/' . $product->cover);
 
             // Get Image File
             $file = $request->file('cover');
             $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
             // Move Image to the related folder
-            $file->move("images/uploads/products/", $fileName);
+            $file->move("public/images/uploads/products/", $fileName);
             $product->cover = $fileName;
 
             $message = "Cover updated";
@@ -315,7 +315,7 @@ class ProductController extends Controller
 
         // All good so update category
         $product = Product::find($request->get('product_id'));
-        File::Delete('images/uploads/products/' . $product->cover);
+        File::Delete('public/images/uploads/products/' . $product->cover);
 
         $product->delete();
 
