@@ -390,6 +390,7 @@ class ComposerStaticInit102e15057680b8af207f853d42a7e42c
         'CreatePrImagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_01_03_210146_create_pr_images_table.php',
         'CreateProductsTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_28_103325_create_products_table.php',
         'CreateSellersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_27_224137_create_sellers_table.php',
+        'CreateSettingsTable' => __DIR__ . '/../..' . '/database/migrations/2017_03_15_194630_create_settings_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_12_27_214042_create_users_table.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
         'ExampleTest' => __DIR__ . '/../..' . '/tests/ExampleTest.php',

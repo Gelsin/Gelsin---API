@@ -24,6 +24,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     $app->group(['middleware' => 'auth'], function ($app) {
         $app->GET('/auth/user', 'AuthController@getUser');
         $app->post('/auth/user/activate', 'AuthController@activate');
+        $app->post('/auth/user/resend', 'AuthController@resendCode');
         $app->PATCH('/auth/refresh', 'AuthController@patchRefresh');
         $app->DELETE('/auth/invalidate', 'AuthController@deleteInvalidate');
 
@@ -66,7 +67,12 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     // -- Brand Services
     $app->get('/brands', 'BrandController@index');
-    $app->get('/brand/{brand_id}', 'BrandController@show');
+    $app->get('/brand/{brand_id}/category', 'BrandController@brandCategory');
+    $app->get('/brand/{brand_id}/products', 'BrandController@brandProducts');
+
+
+    // -- Setting services
+    $app->get('/setting/{key}', 'SettingController@index');
 
 
     // -- Admin Services
@@ -108,6 +114,10 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->get('/order/{order_id}', 'Admin\OrderController@show');
         $app->post('/order/update/status', 'Admin\OrderController@update');
         $app->post('/order/delete', 'ProductController@delete');
+
+        // -- Setting services
+        $app->get('/settings/', 'Admin\SettingController@index');
+        $app->post('/settings/update', 'Admin\SettingController@update');
 
     });
 

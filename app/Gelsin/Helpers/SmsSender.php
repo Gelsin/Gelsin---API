@@ -27,7 +27,6 @@ class SmsSender
         return $this->sendTo($gsm, $text);
     }
 
-
     /**
      * @param $gsm
      * @param $text

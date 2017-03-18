@@ -30,6 +30,7 @@ return array(
     'CreatePrImagesTable' => $baseDir . '/database/migrations/2017_01_03_210146_create_pr_images_table.php',
     'CreateProductsTable' => $baseDir . '/database/migrations/2016_12_28_103325_create_products_table.php',
     'CreateSellersTable' => $baseDir . '/database/migrations/2016_12_27_224137_create_sellers_table.php',
+    'CreateSettingsTable' => $baseDir . '/database/migrations/2017_03_15_194630_create_settings_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2016_12_27_214042_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'ExampleTest' => $baseDir . '/tests/ExampleTest.php',

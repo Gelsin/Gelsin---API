@@ -18,22 +18,12 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class)->create([
-            'email' => 'alirzayev.07@gmail.com',
-            'username' => 'alirzayev',
-            'password' => app('hash')->make('Alirzayev57')
-        ]);
 
         factory(User::class)->create([
-            'email' => 'admin@gelsin.com',
+            'email' => 'admin@gelsin.az',
             'username' => 'admin',
-            'password' => app('hash')->make('admin1234')
-        ]);
-
-        factory(User::class)->create([
-            'email' => 'orik@gelsin.com',
-            'username' => 'orik',
-            'password' => app('hash')->make('admin1234')
+            'is_customer' => 0,
+            'password' => app('hash')->make('gelsin135')
         ]);
 
     }

@@ -267,8 +267,6 @@ class AuthController extends Controller
         $activationCode = $request->get('activation_code');
         $user = JWTAuth::parseToken()->authenticate();
 
-        $user = $this->user->find($user->id);
-
         if ($user && $user->verification_code === $activationCode) {
             $user->confirmed_at = Carbon::now();
             $user->save();
@@ -284,5 +282,35 @@ class AuthController extends Controller
             "error" => true,
             'message' => 'Verification code error. Please, Check your code!',
         ]);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function resendCode()
+    {
+
+        $activation_code = rand(100000, 999999);
+        $user = JWTAuth::parseToken()->authenticate();
+        $user->verification_code = $activation_code;
+        $user->save();
+        $customer = $user->customerDetail;
+        $this->smsSender->activation($customer, $activation_code);
+
+        return new JsonResponse([
+            "error" => false,
+            'message' => 'Thanks! Activation code has successfully resent!',
+            'user' => $user,
+        ]);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function resetPassword(Request $request)
+    {
+
     }
 }

@@ -51,7 +51,11 @@ class OrderController extends Controller
         // All good so list user orders
         foreach ($orders as $order) {
             $order->detail;
-            $order->products;
+
+            foreach ($order->products as $product) {
+                $product->relatedProduct;
+            }
+
         }
 
         return new JsonResponse([

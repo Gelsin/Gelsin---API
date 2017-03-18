@@ -45,7 +45,7 @@ class BrandController extends Controller
 
         $brand_id = $request->get('brand_id');
         $brand = ProductBrand::find($brand_id);
-        $brand->products;
+        $brand->category;
 
         if (!$brand) {
             return new JsonResponse([
@@ -59,6 +59,60 @@ class BrandController extends Controller
             "error" => false,
             "message" => "Brand is displayed below!",
             'brand' => $brand,
+        ]);
+
+    }
+
+
+    /**
+     * show brand with its products
+     * @param $brand_id
+     * @return JsonResponse
+     */
+    public function brandCategory($brand_id)
+    {
+
+        $brand = ProductBrand::find($brand_id);
+
+        if (!$brand) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => "No related brand found! ",
+            ]);
+        }
+
+
+        return new JsonResponse([
+            "error" => false,
+            "message" => $brand->name . " category displayed below!",
+            'category' => $brand->category,
+        ]);
+
+    }
+
+    /**
+     * show brand with its products
+     * @param $brand_id
+     * @return JsonResponse
+     */
+    public function brandProducts($brand_id)
+    {
+
+        $brand = ProductBrand::find($brand_id);
+        $brand->products;
+
+        if (!$brand) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => "No related brand found! ",
+            ]);
+        }
+
+
+        return new JsonResponse([
+            "error" => false,
+            "message" => $brand->name . " products displayed below!",
+            'products' => $brand->products,
         ]);
 
     }
