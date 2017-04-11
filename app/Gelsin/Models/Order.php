@@ -49,4 +49,14 @@ class Order extends Model
         return $this->belongsTo(User::class, 'customer_id')->with('customerDetail');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function courier()
+    {
+        return $this->belongsTo(Courier::class, 'courier_id');
+    }
+
+
+
 }

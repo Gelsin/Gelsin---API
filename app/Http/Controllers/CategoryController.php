@@ -12,9 +12,8 @@ namespace App\Http\Controllers;
 use App\Gelsin\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Validator;
 
 
 class CategoryController extends Controller
@@ -46,6 +45,10 @@ class CategoryController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function showParents(Request $request)
     {
 
@@ -55,6 +58,28 @@ class CategoryController extends Controller
             "error" => false,
             "message" => "success",
             'categoryTree' => $categories,
+        ]);
+    }
+
+    /**
+     * @param $cat_id
+     * @return JsonResponse
+     */
+    public function showBrands($cat_id)
+    {
+
+        $category = Category::find($cat_id);
+        if (!$category) {
+            return new JsonResponse([
+                "error" => true,
+                "message" => "There is no such category",
+            ]);
+        }
+
+        return new JsonResponse([
+            "error" => false,
+            "message" => $category->name . "'s brands are listed below.",
+            'brands' => $category->brands,
         ]);
     }
 

@@ -51,6 +51,7 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     $app->get('/categories', 'CategoryController@index');
     $app->get('categories/parents', 'CategoryController@showParents');
     $app->get('categories/{id}', 'CategoryController@show');
+    $app->get('category/{id}/brands', 'CategoryController@showBrands');
     $app->get('category/image/{category_id}', 'CategoryController@showImage');
 
 
@@ -64,6 +65,8 @@ $app->group(['prefix' => 'api'], function () use ($app) {
     $app->get('/branches', 'BranchController@index');
     $app->get('/branch/addresses', 'BranchAddressController@index');
     $app->get('/branch/{address_id}', 'BranchAddressController@showBranch');
+    $app->get('/branches/{branch_id}/addresses', 'BranchAddressController@showBranchAddresses');
+
 
     // -- Brand Services
     $app->get('/brands', 'BrandController@index');
@@ -113,12 +116,16 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         $app->get('/orders/{status}', 'Admin\OrderController@index');
         $app->get('/order/{order_id}', 'Admin\OrderController@show');
         $app->post('/order/update/status', 'Admin\OrderController@update');
+        $app->post('/order/courier/add', 'Admin\OrderController@setCourier');
         $app->post('/order/delete', 'ProductController@delete');
 
         // -- Setting services
         $app->get('/settings/', 'Admin\SettingController@index');
         $app->post('/settings/update', 'Admin\SettingController@update');
 
+        // -- User services
+        $app->get('/users/', 'Admin\UserController@index');
+        $app->post('/users/create', 'Admin\UserController@create');
     });
 
 });

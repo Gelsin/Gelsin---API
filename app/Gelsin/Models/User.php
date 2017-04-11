@@ -83,6 +83,29 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
 
     /**
+     * Scope a query to only include popular users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCouriers($query)
+    {
+        return $query->where('is_courier', '=', 1);
+    }
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCustomers($query)
+    {
+        return $query->where('is_customer', '=', 1);
+    }
+
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orders()
@@ -105,6 +128,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function customerDetail()
     {
         return $this->hasOne(Customer::class, 'user_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function courierDetail()
+    {
+        return $this->hasOne(Courier::class, 'user_id');
     }
 
 }

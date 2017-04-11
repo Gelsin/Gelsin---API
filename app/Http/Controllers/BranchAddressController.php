@@ -9,9 +9,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Gelsin\Models\Branch;
 use App\Gelsin\Models\BranchAdress;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 class BranchAddressController extends Controller
@@ -62,6 +63,41 @@ class BranchAddressController extends Controller
             "message" => $message,
             "address" => $address->street_name,
             'branch' => $address->branch
+        ]);
+    }
+
+    /**
+     * @param $branch_id
+     * @return JsonResponse
+     */
+    public function showBranchAddresses($branch_id)
+    {
+
+        if ($branch_id) {
+
+            $branch = Branch::find($branch_id);
+            if (!$branch) {
+                return new JsonResponse([
+                    "error" => true,
+                    "message" => "no such branch exists",
+                ]);
+            }
+
+            $branch->addresses;
+            $error = false;
+            $message = $branch->name . " addresses are listed below";
+
+        } else {
+            $error = true;
+            $message = "Mismatch parameter";
+            $branch = null;
+        }
+
+
+        return new JsonResponse([
+            "error" => $error,
+            "message" => $message,
+            "addresses" => $branch->addresses,
         ]);
     }
 

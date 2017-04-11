@@ -8,6 +8,8 @@
  */
 namespace App\Http\Controllers\Admin;
 
+use App\Gelsin\Helpers\SmsSender;
+use App\Gelsin\Models\Courier;
 use App\Gelsin\Models\Order;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -47,6 +49,51 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * Set courier to order
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function setCourier(Request $request)
+    {
+
+
+        $courier_id = $request->courier_id;
+        $courier = Courier::find($courier_id);
+        $order_id = $request->order_id;
+        $order = Order::find($order_id);
+
+        $smsSender = new SmsSender();
+
+
+        if (!$courier) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'no courier found!',
+            ]);
+        }
+        if (!$order) {
+
+            return new JsonResponse([
+                "error" => true,
+                'message' => 'no order found!',
+            ]);
+        }
+
+        $order->courier_id = $courier_id;
+        $order->save();
+        $order->courier;
+
+        $smsSender->smsToCourier($courier, "Sizin yeni siparişiniz var! ");
+
+        return new JsonResponse([
+            "error" => false,
+            'message' => 'Courier is set to order',
+            'order' => $order,
+        ]);
+    }
 
     /**
      * @param $order_id

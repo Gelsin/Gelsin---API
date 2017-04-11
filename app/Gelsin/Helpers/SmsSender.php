@@ -8,6 +8,7 @@
  */
 namespace App\Gelsin\Helpers;
 
+use App\Gelsin\Models\Courier;
 use App\Gelsin\Models\Customer;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Config;
@@ -23,6 +24,13 @@ class SmsSender
     {
         $gsm = $customer->contact;
         $text = "Sizin aktivasiya kodunuz " . $activationCode;
+
+        return $this->sendTo($gsm, $text);
+    }
+
+    public function smsToCourier(Courier $courier, $text)
+    {
+        $gsm = $courier->contact;
 
         return $this->sendTo($gsm, $text);
     }
