@@ -90,7 +90,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function scopeCouriers($query)
     {
-        return $query->where('is_courier', '=', 1);
+        return $query->where('is_courier', '=', 1)->with('courierDetail');
     }
 
     /**
@@ -101,7 +101,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function scopeCustomers($query)
     {
-        return $query->where('is_customer', '=', 1);
+        return $query->where('is_customer', '=', 1)->with('customerDetail');
     }
 
 
@@ -136,6 +136,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function courierDetail()
     {
         return $this->hasOne(Courier::class, 'user_id');
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            $user->orders()->delete();
+            $user->addresses()->delete();
+            $user->customerDetail()->delete();
+            $user->courierDetail()->delete();
+        });
     }
 
 }

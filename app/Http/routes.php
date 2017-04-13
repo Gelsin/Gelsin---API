@@ -46,7 +46,6 @@ $app->group(['prefix' => 'api'], function () use ($app) {
 
     });
 
-
     // -- Categories Services
     $app->get('/categories', 'CategoryController@index');
     $app->get('categories/parents', 'CategoryController@showParents');
@@ -126,7 +125,17 @@ $app->group(['prefix' => 'api'], function () use ($app) {
         // -- User services
         $app->get('/users/', 'Admin\UserController@index');
         $app->post('/users/create', 'Admin\UserController@create');
+        $app->post('/users/delete', 'Admin\UserController@delete');
+
     });
+
+    $app->group(['prefix' => 'courier', 'middleware' => ['auth', 'courier']], function () use ($app) {
+
+        $app->get('orders', 'CourierController@orders');
+        $app->post('complete', 'CourierController@completeOrder');
+
+    });
+
 
 });
 

@@ -10,8 +10,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Gelsin\Models\Courier;
 use App\Gelsin\Models\Customer;
-use App\Http\Controllers\Controller;
 use App\Gelsin\Models\User;
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -54,6 +54,7 @@ class UserController extends Controller
         if ($type == '2') {
             $users = User::couriers()->get();
         }
+
         return new JsonResponse([
             "error" => false,
             'message' => 'success',
@@ -95,8 +96,11 @@ class UserController extends Controller
         $this->user->password = app('hash')->make($request->get("password"));
         $this->user->verification_code = $activation_code;
         $this->user->confirmed_at = Carbon::now();
-        if ($type == 2)
+        if ($type == 2) {
             $this->user->is_courier = 1;
+            $this->user->is_customer = 0;
+        }
+
         $this->user->save();
 
         if ($type == 1) {
@@ -119,7 +123,7 @@ class UserController extends Controller
         return new JsonResponse([
             "error" => false,
             'message' => 'user is created',
-            'users' => $this->user,
+            'user' => $this->user,
         ]);
 
     }
@@ -196,16 +200,21 @@ class UserController extends Controller
 
 
         // All good so update category
-        $order = Order::find($request->get('order_id'));
-        $order->detail->delete();
-        $order->products->delete();
-        $order->delete();
+        $user = User::find($request->get('user_id'));
 
+        if (!$user) {
+            return new JsonResponse([
+                "error" => true,
+                'message' => "There is no such user exists!",
+            ]);
+        }
+
+        $user->delete();
 
         return new JsonResponse([
             "error" => false,
-            'message' => "Selected order is soft deleted",
-            "category" => $order
+            'message' => "User and its relations are deleted successfully!",
+            "user" => $user
         ]);
 
     }

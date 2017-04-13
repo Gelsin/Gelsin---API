@@ -33,5 +33,12 @@ class Courier extends Model
         'deleted_at',
     ];
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'courier_id');
+    }
+
+
+
 
 }
