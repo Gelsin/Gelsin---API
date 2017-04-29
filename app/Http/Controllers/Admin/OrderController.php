@@ -63,8 +63,7 @@ class OrderController extends Controller
         $courier = Courier::find($courier_id);
         $order_id = $request->order_id;
         $order = Order::find($order_id);
-
-        $smsSender = new SmsSender();
+        $customer = $order->customer->customerDetail;
 
 
         if (!$courier) {
@@ -83,10 +82,14 @@ class OrderController extends Controller
         }
 
         $order->courier_id = $courier_id;
+        $order->status = 3;
         $order->save();
         $order->courier;
 
+        $smsSender = new SmsSender();
         $smsSender->smsToCourier($courier, "Sizin yeni siparişiniz var! ");
+        $smsSender->smsToCustomer($customer, "Sifarişiniz kuryere teslim edildi! ");
+
 
         return new JsonResponse([
             "error" => false,

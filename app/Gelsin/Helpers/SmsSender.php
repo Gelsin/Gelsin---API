@@ -28,9 +28,26 @@ class SmsSender
         return $this->sendTo($gsm, $text);
     }
 
+    /**
+     * @param Courier $courier
+     * @param $text
+     * @return \Psr\Http\Message\StreamInterface
+     */
     public function smsToCourier(Courier $courier, $text)
     {
         $gsm = $courier->contact;
+
+        return $this->sendTo($gsm, $text);
+    }
+
+    /**
+     * @param Customer $customer
+     * @param $text
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    public function smsToCustomer(Customer $customer, $text)
+    {
+        $gsm = $customer->contact;
 
         return $this->sendTo($gsm, $text);
     }

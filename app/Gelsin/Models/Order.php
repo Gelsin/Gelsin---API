@@ -58,5 +58,14 @@ class Order extends Model
     }
 
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($order) {
+            $order->detail()->delete();
+            $order->products()->delete();
+        });
+    }
 
 }

@@ -35,7 +35,7 @@ class Courier extends Model
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'courier_id');
+        return $this->hasMany(Order::class, 'courier_id')->where('status', 3);
     }
 
 

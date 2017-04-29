@@ -144,6 +144,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         parent::boot();
 
         static::deleting(function ($user) {
+            foreach ($user->orders as $order) {
+                $order->detail()->delete();
+                $order->products()->delete();
+            }
             $user->orders()->delete();
             $user->addresses()->delete();
             $user->customerDetail()->delete();
